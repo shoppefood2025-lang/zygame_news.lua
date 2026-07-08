@@ -1,8 +1,9 @@
+-- SCRIPT HOÀN CHỈNH - ZYGAME_VN LAUNCHER
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 
--- 1. TẠO GIAO DIỆN (ĐĂNG NHẬP & MENU)
+-- 1. TẠO GIAO DIỆN HỆ THỐNG
 local gui = script.Parent
 local loginFrame = Instance.new("Frame", gui); loginFrame.Name = "LoginFrame"; loginFrame.Size = UDim2.new(0, 220, 0, 120); loginFrame.Position = UDim2.new(0.5, -110, 0.5, -60)
 loginFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30); Instance.new("UICorner", loginFrame)
@@ -15,24 +16,30 @@ Instance.new("UICorner", menu)
 
 local title = Instance.new("TextLabel", menu); title.Size = UDim2.new(1, 0, 0.2, 0); title.Text = "zygame_vn"; title.BackgroundTransparency = 1; title.TextColor3 = Color3.new(1, 1, 1); title.Font = Enum.Font.Bold; title.TextSize = 24
 
--- 2. LOGIC ĐĂNG NHẬP
+-- 2. LOGIC ĐĂNG NHẬP (BẢO MẬT)
 local PASSWORD = "zygame_key"
 loginBtn.MouseButton1Click:Connect(function()
     if passBox.Text == PASSWORD then
         loginFrame:Destroy() -- Xóa khung đăng nhập
         menu.Visible = true
         
-        -- Chạy script mới của bạn
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/shoppefood2025-lang/zygisk.lua/refs/heads/main/zygame_new.lua"))()
+        -- Gọi script từ GitHub với kiểm tra lỗi
+        local success, err = pcall(function()
+            local response = game:HttpGet("https://raw.githubusercontent.com/shoppefood2025-lang/zygisk.lua/refs/heads/main/zygame_new.lua")
+            loadstring(response)()
         end)
+        
+        if not success then
+            warn("Lỗi tải script: " .. tostring(err))
+            title.Text = "Lỗi kết nối!"
+        end
     else
         passBox.Text = ""
         passBox.PlaceholderText = "Sai mật khẩu!"
     end
 end)
 
--- 3. HIỆU ỨNG MENU (Thở & 7 màu)
+-- 3. HIỆU ỨNG THẨM MỸ (THỞ & CẦU VỒNG)
 local tweenInfo = TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
 TweenService:Create(menu, tweenInfo, {Size = UDim2.new(0, 370, 0, 370)}):Play()
 
@@ -42,7 +49,7 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
--- 4. PHÍM TẮT ĐÓNG/MỞ (RightControl)
+-- 4. PHÍM TẮT ĐIỀU KHIỂN
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if not gameProcessed and input.KeyCode == Enum.KeyCode.RightControl then
         menu.Visible = not menu.Visible
