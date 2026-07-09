@@ -3,43 +3,26 @@ return function()
 
     local Window = Rayfield:CreateWindow({
         Name = "Zamex Pro Hub",
-        LoadingTitle = "Đang khởi tạo Zamex...",
+        LoadingTitle = "Zamex Initializing...",
         LoadingSubtitle = "by YourName",
-        ConfigurationSaving = { Enabled = true, FileName = "ZamexConfig" }
+        Theme = "Default"
     })
 
-    -- Tạo Tab
+    Window:SetAccentColor(Color3.fromRGB(0, 150, 255)) -- Màu xanh Zamex
+
     local MainTab = Window:CreateTab("Main", "sword")
     
-    -- Chia cột trong Tab Main
-    local LeftColumn = MainTab:CreateSection("Farm & Methods")
-    
-    MainTab:CreateToggle({
-        Name = "Auto Farm",
-        Callback = function(Value) end
-    })
+    -- Chia cột 1 (Bên trái)
+    local Left = MainTab:CreateSection("Farm & Methods")
+    Left:CreateToggle({Name = "Auto Farm", Callback = function(v) end})
+    Left:CreateToggle({Name = "Auto Mystic Island", Callback = function(v) end})
+    Left:CreateButton({Name = "Refresh Weapon", Callback = function() end})
 
-    MainTab:CreateToggle({
-        Name = "Auto Mystic Island",
-        Callback = function(Value) end
-    })
+    -- Chia cột 2 (Bên phải)
+    local Right = MainTab:CreateSection("Boss & Elite")
+    Right:CreateToggle({Name = "Auto Law Boss", Callback = function(v) end})
+    Right:CreateToggle({Name = "Auto Elite Hunter", Callback = function(v) end})
+    Right:CreateToggle({Name = "Auto Hallow Scythe", Callback = function(v) end})
 
-    local RightColumn = MainTab:CreateSection("Boss & Raid")
-    
-    RightColumn:CreateToggle({
-        Name = "Auto Law Boss",
-        Callback = function(Value) end
-    })
-
-    RightColumn:CreateToggle({
-        Name = "Auto Advance Dungeon",
-        Callback = function(Value) end
-    })
-
-    -- Tạo thông báo
-    Rayfield:Notify({
-        Title = "Thành công",
-        Content = "Menu đã được tải lên!",
-        Duration = 5
-    })
+    Rayfield:Notify({Title = "Thành công", Content = "Script đã nạp hoàn tất!", Duration = 5})
 end
